@@ -1,4 +1,7 @@
 from fastapi import FastAPI
+from models import Blog
+import uvicorn
+
 from typing import Optional
 
 app = FastAPI()
@@ -26,3 +29,11 @@ def get_blog(id: int):
 def get_blog_comments(id: int):
     # fetch comments of blog with id = id
     return {"data":{"comments":f"comments of blog {id}"}}
+
+@app.post('/blog')
+def create_blog(blog: Blog):
+    return {"data":blog}
+
+
+if __name__ =='__main__':
+    uvicorn.run(app, host="127.0.0.1", port=8000)

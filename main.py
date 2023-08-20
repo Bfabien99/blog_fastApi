@@ -6,6 +6,10 @@ app = FastAPI()
 def index():
     return {"data":{"creator":"Brou Kouadio Stéphane-Fabien"}}
 
-@app.get('/about')
-def index():
-    return {"data":"about page"}
+@app.get('/blogs')
+def get_blogs():
+    return {"data":"show all blogs"}
+
+@app.get('/blog/{id}')
+def get_blog(id):
+    return {"data":"show blog "+id}

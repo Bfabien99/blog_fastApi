@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, status, Response, HTTPException
+from typing import List, Dict
 
 from . import schemas, models
 from sqlalchemy.orm import Session
@@ -15,18 +16,18 @@ def get_db():
 
 app = FastAPI()
 
-@app.get('/blogs')
+@app.get('/blogs', response_model=List[schemas.ShowBlog])
 def get_all_blogs(db: Session = Depends(get_db)):
     blogs = db.query(models.Blog).all()
-    return {"data":blogs}
+    return blogs
 
-@app.get('/blog/{id}', status_code=status.HTTP_200_OK)
+@app.get('/blog/{id}', status_code=status.HTTP_200_OK, response_model=schemas.ShowBlog)
 def get_a_blog(id: int, response: Response, db: Session = Depends(get_db)):
     blog = db.query(models.Blog).filter(models.Blog.id==id).first()
     if not blog:
         response.status_code=status.HTTP_404_NOT_FOUND
         return {"detail":f"Blog with the id {id} was not found"}
-    return {"data":blog}
+    return blog
    
 @app.post('/blog', name="Create a new blog", status_code=status.HTTP_201_CREATED)
 def create_blog(request: schemas.Blog, db: Session = Depends(get_db)):

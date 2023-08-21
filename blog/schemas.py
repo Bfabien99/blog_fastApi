@@ -4,3 +4,5 @@ class Blog(BaseModel):
     title : str
     body : str
     
+class ShowBlog(Blog):
+    pass
